@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import cardsData from './cardsData';
 
 import Header from './components/Header';
+import LostPopup from './components/LostPopup';
 
 import Card from './components/Card';
 
@@ -12,6 +13,8 @@ function App() {
   const [bestScore, setBestScore] = useState(0);
   const [clickedCards, setClickedCards] = useState([]);
   const [cardsList, setCardsList] = useState([]);
+
+  const [lost, setLost] = useState(false);
 
   useEffect(() => {
     setCardsList(shuffleCards(cardsData));
@@ -48,6 +51,7 @@ function App() {
 
   const markCardClicked = (cardID, cardsData) => {
     if (alreadyClicked(cardID)) {
+      setLost(true);
       resetGame();
     } else {
       setClickedCards(clickedCards.concat(fetchCard(cardID, cardsData)));
@@ -80,6 +84,7 @@ function App() {
 
   return (
     <div className="App">
+      {lost && <LostPopup hidePopUp={() => setLost(false)} />}
       <Header currentScore={currentScore} bestScore={bestScore} />
       <div id="cards">{displayCards(cardsList)}</div>
     </div>

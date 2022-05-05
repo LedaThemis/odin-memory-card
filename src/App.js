@@ -3,6 +3,7 @@ import cardsData from './cardsData';
 
 import Header from './components/Header';
 import LostPopup from './components/LostPopup';
+import WonPopup from './components/WonPopup';
 
 import Card from './components/Card';
 
@@ -15,6 +16,7 @@ function App() {
   const [cardsList, setCardsList] = useState([]);
 
   const [lost, setLost] = useState(false);
+  const [won, setWon] = useState(false);
 
   useEffect(() => {
     setCardsList(shuffleCards(cardsData));
@@ -22,6 +24,7 @@ function App() {
 
   useEffect(() => {
     updateBestScore();
+    checkIfWon();
   }, [currentScore]);
 
   const displayCards = (cardsData) => {
@@ -59,6 +62,13 @@ function App() {
     }
   };
 
+  const checkIfWon = () => {
+    if (cardsList.length === 0) return;
+    if (currentScore >= cardsList.length) {
+      setWon(true);
+    }
+  };
+
   const incrementScore = () => {
     setCurrentScore(currentScore + 1);
   };
@@ -80,11 +90,13 @@ function App() {
   const resetGame = () => {
     resetScore();
     resetClickedCards();
+    setWon(false);
   };
 
   return (
     <div className="App">
       {lost && <LostPopup hidePopUp={() => setLost(false)} />}
+      {won && <WonPopup hidePopUp={() => resetGame()} />}
       <Header currentScore={currentScore} bestScore={bestScore} />
       <div id="cards">{displayCards(cardsList)}</div>
     </div>

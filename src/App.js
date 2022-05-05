@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import cardsData from './cardsData';
 
 import Header from './components/Header';
 import PopUp from './components/PopUp';
@@ -13,13 +12,21 @@ function App() {
   const [bestScore, setBestScore] = useState(0);
   const [clickedCards, setClickedCards] = useState([]);
   const [cardsList, setCardsList] = useState([]);
+  const [fetchedData, setFetchedData] = useState([]);
 
   const [lost, setLost] = useState(false);
   const [won, setWon] = useState(false);
 
   useEffect(() => {
-    setCardsList(shuffleCards(cardsData));
-  }, [clickedCards]);
+    fetch('https://api.jikan.moe/v4/anime/199/characters')
+      .then((res) => res.json())
+      .then((data) => setFetchedData(processData(data)));
+  }, []);
+
+  useEffect(() => {
+    if (fetchedData === []) return;
+    setCardsList(shuffleCards(fetchedData));
+  }, [clickedCards, fetchedData]);
 
   useEffect(() => {
     updateBestScore();
@@ -90,6 +97,16 @@ function App() {
     resetScore();
     resetClickedCards();
     setWon(false);
+  };
+
+  const processData = (data) => {
+    return data.data
+      .map(({ character }) => character)
+      .map(({ mal_id, images, name }) => ({
+        id: mal_id,
+        title: name,
+        url: images.jpg.image_url,
+      }));
   };
 
   return (

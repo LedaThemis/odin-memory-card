@@ -17,9 +17,13 @@ function App() {
     setCardsList(shuffleCards(cardsData));
   }, [clickedCards]);
 
+  useEffect(() => {
+    updateBestScore();
+  }, [currentScore]);
+
   const displayCards = (cardsData) => {
     return cardsData.map(({ id, title, url }) => (
-      <Card title={title} url={url} markCardClicked={() => markCardClicked(id, cardsData)} />
+      <Card key={id} title={title} url={url} markCardClicked={() => markCardClicked(id, cardsData)} />
     ));
   };
 
@@ -44,17 +48,40 @@ function App() {
 
   const markCardClicked = (cardID, cardsData) => {
     if (alreadyClicked(cardID)) {
-      //resetGame();
+      resetGame();
     } else {
       setClickedCards(clickedCards.concat(fetchCard(cardID, cardsData)));
+      incrementScore();
     }
+  };
+
+  const incrementScore = () => {
+    setCurrentScore(currentScore + 1);
+  };
+
+  const updateBestScore = () => {
+    if (currentScore > bestScore) {
+      setBestScore(currentScore);
+    }
+  };
+
+  const resetScore = () => {
+    setCurrentScore(0);
+  };
+
+  const resetClickedCards = () => {
+    setClickedCards([]);
+  };
+
+  const resetGame = () => {
+    resetScore();
+    resetClickedCards();
   };
 
   return (
     <div className="App">
       <Header currentScore={currentScore} bestScore={bestScore} />
       <div id="cards">{displayCards(cardsList)}</div>
-      <div>{clickedCards.map(({ id, title, url }) => title).join(', ')}</div>
     </div>
   );
 }

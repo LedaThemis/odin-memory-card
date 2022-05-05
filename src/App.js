@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import cardsData from './cardsData';
 
 import Header from './components/Header';
-import LostPopup from './components/LostPopup';
-import WonPopup from './components/WonPopup';
+import PopUp from './components/PopUp';
 
 import Card from './components/Card';
 
@@ -95,8 +94,8 @@ function App() {
 
   return (
     <div className="App">
-      {lost && <LostPopup hidePopUp={() => setLost(false)} />}
-      {won && <WonPopup hidePopUp={() => resetGame()} />}
+      {lost && <PopUp text="You Lost!" hidePopUp={() => setLost(false)} />}
+      {won && <PopUp text="You Won 🎉" hidePopUp={() => resetGame()} />}
       <Header currentScore={currentScore} bestScore={bestScore} />
       <div id="cards">{displayCards(cardsList)}</div>
     </div>

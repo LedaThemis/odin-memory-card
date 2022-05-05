@@ -1,4 +1,4 @@
-.won-popup {
+.popup {
     position: fixed;
 
     width: 100%;
@@ -12,7 +12,7 @@
     background-color: rgba(0, 0, 0, 0.2);
 }
 
-.won-popup-modal {
+.popup-modal {
     display: flex;
     background-color: aliceblue;
     padding: 2rem;
@@ -22,12 +22,12 @@
     border-radius: 1rem;
 }
 
-.won-popup-text {
+.popup-text {
     margin: 0;
     color: darkblue;
 }
 
-#close-wonpopup-button {
+#close-popup-button {
     background-color: transparent;
     border: none;
     cursor: pointer;
